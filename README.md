@@ -1,12 +1,13 @@
 # hy548
-<summary>Excersice 1<summary>
+<details>
+<summary>Excersice 1</summary>
 
-a. Download the images tagged 1.23.3 and 1.23.3-alpine locally.
+1. Download the images tagged 1.23.3 and 1.23.3-alpine locally.
 
 >Docker image pull  nginx:1.23.3
 >Docker image pull  nginx:1.23.3-alpine
 
-b. Compare the sizes of the two images.
+2. Compare the sizes of the two images.
 
 REPOSITORY                TAG             IMAGE ID       CREATED         SIZE
 hello-world               latest        	  9c7a54a9a43c   9 months ago    13.3kB
@@ -21,3 +22,5 @@ calls are answered. What is the answer?
 
 > docker run -p 8080:80 -d nginx:1.23.3-alpine
 > curl http://127.0.0.1:8080
+
+</details>
