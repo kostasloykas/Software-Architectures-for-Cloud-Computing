@@ -289,8 +289,7 @@
 
     CONTAINER ID   IMAGE                      COMMAND                  CREATED          STATUS          PORTS                                   NAMES             SIZE
 
-    9d54d3f6b1c8   image_assignment1:latest   "/docker-entrypoint.…"   39 seconds ago   Up 38 
-    seconds   80/tcp                                  elastic_burnell   1.09kB (virtual 324MB)
+    9d54d3f6b1c8   image_assignment1:latest   "/docker-entrypoint.…"   39 seconds ago   Up 38 seconds   80/tcp                              elastic_burnell   1.09kB (virtual 324MB)
 
     6997303345ac   nginx:1.23.3               "/docker-entrypoint.…"   29 hours ago     Up 12 minutes   0.0.0.0:8080->80/tcp, :::8080->80/tcp   great_torvalds    6.74MB (virtual 149MB)
     ```
