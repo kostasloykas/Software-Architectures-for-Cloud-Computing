@@ -1,6 +1,6 @@
 # hy548
 <details>
-<summary>Excersice 1</summary>
+<summary>Exercise 1</summary>
 
 1. Download the images tagged 1.23.3 and 1.23.3-alpine locally.
 
@@ -22,5 +22,12 @@ calls are answered. What is the answer?
 
 > docker run -p 8080:80 -d nginx:1.23.3-alpine
 > curl http://127.0.0.1:8080
+
+
+
+
+<summary>Exercise 2</summary>
+
+
 
 </details>
