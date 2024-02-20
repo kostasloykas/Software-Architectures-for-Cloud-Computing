@@ -254,47 +254,52 @@
 
 
 
-a. The Dockerfile.
+1. The Dockerfile.
 
-FROM nginx:1.23.3
+    ```
+    FROM nginx:1.23.3
 
-RUN apt-get update && \
-apt install -y git && \
-apt install -y hugo && \
-git clone --recursive https://github.com/chazapis/hy548 && \
-cd hy548/html && \
-hugo -D && \
-cp -r public/* /usr/share/nginx/html/
-
-
-
-b. The command needed to upload the image to Docker Hub.
-
->docker login
->docker tag image_assignment1:latest kostasloykas/assingment1
->docker push kostasloykas/assignment1
+    RUN apt-get update && \
+    apt install -y git && \
+    apt install -y hugo && \
+    git clone --recursive https://github.com/chazapis/hy548 && \
+    cd hy548/html && \
+    hugo -D && \
+    cp -r public/* /usr/share/nginx/html/
+    ```
 
 
 
+2. The command needed to upload the image to Docker Hub.
+    
+    ```
+    >docker login
+    >docker tag image_assignment1:latest kostasloykas/assingment1
+    >docker push kostasloykas/assignment1
+    ```
 
 
 
-c. How much bigger is your own image than the image you were based on. Why;
 
->docker ps -s
 
-CONTAINER ID   IMAGE                      COMMAND                  CREATED          STATUS          PORTS                                   NAMES             SIZE
+3. How much bigger is your own image than the image you were based on. Why;
 
-9d54d3f6b1c8   image_assignment1:latest   "/docker-entrypoint.…"   39 seconds ago   Up 38 
-seconds   80/tcp                                  elastic_burnell   1.09kB (virtual 324MB)
+    ```
+    >docker ps -s
 
-6997303345ac   nginx:1.23.3               "/docker-entrypoint.…"   29 hours ago     Up 12 minutes   0.0.0.0:8080->80/tcp, :::8080->80/tcp   great_torvalds    6.74MB (virtual 149MB)
+    CONTAINER ID   IMAGE                      COMMAND                  CREATED          STATUS          PORTS                                   NAMES             SIZE
 
-Όπως βλέπουμε, το image που δημιουργήσαμε από το Dockerfile είναι πολύ μεγαλύτερη από το image που είχαμε δημιουργήσει πριν (για την ακρίβεια, 175MB μεγαλύτερη). Αυτό οφείλεται στο ότι εγκαταστήσαμε κάποιες βιβλιοθήκες, ενημερώσαμε το apt repository μέσα στο image, και επίσης, κλωνοποιήσαμε τη σελίδα από το GitHub. Οπότε είναι λογικό να έχει και μεγαλύτερο μέγεθος από το προηγούμενο image όπου το build του ιστότοπου έγινε έξω από το image."
+    9d54d3f6b1c8   image_assignment1:latest   "/docker-entrypoint.…"   39 seconds ago   Up 38 
+    seconds   80/tcp                                  elastic_burnell   1.09kB (virtual 324MB)
 
-d. What have you done in the Dockerfile to keep the image as small as possible?
+    6997303345ac   nginx:1.23.3               "/docker-entrypoint.…"   29 hours ago     Up 12 minutes   0.0.0.0:8080->80/tcp, :::8080->80/tcp   great_torvalds    6.74MB (virtual 149MB)
+    ```
 
-Συνδύασα πολλές εντολές RUN σε ένα μόνο επίπεδο για να ελαχιστοποιήσω τον αριθμό των επιπέδων στο image. Αυτό μειώνει το συνολικό μέγεθος.
+    Όπως βλέπουμε, το image που δημιουργήσαμε από το Dockerfile είναι πολύ μεγαλύτερη από το image που είχαμε δημιουργήσει πριν (για την ακρίβεια, 175MB μεγαλύτερη). Αυτό οφείλεται στο ότι εγκαταστήσαμε κάποιες βιβλιοθήκες, ενημερώσαμε το apt repository μέσα στο image, και επίσης, κλωνοποιήσαμε τη σελίδα από το GitHub. Οπότε είναι λογικό να έχει και μεγαλύτερο μέγεθος από το προηγούμενο image όπου το build του ιστότοπου έγινε έξω από το image."
+
+4. What have you done in the Dockerfile to keep the image as small as possible?
+
+    Συνδύασα πολλές εντολές RUN σε ένα μόνο επίπεδο για να ελαχιστοποιήσω τον αριθμό των επιπέδων στο image. Αυτό μειώνει το συνολικό μέγεθος.
 
 
 
