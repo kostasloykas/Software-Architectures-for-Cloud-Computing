@@ -197,8 +197,7 @@
 
 <summary>Exercise 3</summary>
 
-
-    Write down the commands needed to download the repository (and submodules) and hugo (the tool that builds the website), build the website locally, and start an Nginx container to serve the CS-548 website instead of the default page.
+1. Write down the commands needed to download the repository (and submodules) and hugo (the tool that builds the website), build the website locally, and start an Nginx container to serve the CS-548 website instead of the default page.
 
     Κανουμε clone απο το repo στο git με την παραμετρο recursive για να κανει include και τα submodules.
     
