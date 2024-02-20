@@ -3,8 +3,6 @@
 
 a. Download the images tagged 1.23.3 and 1.23.3-alpine locally.
 
-a. Download the images tagged 1.23.3 and 1.23.3-alpine locally.
-
 >Docker image pull  nginx:1.23.3
 >Docker image pull  nginx:1.23.3-alpine
 
