@@ -71,7 +71,6 @@
 
     ```
     >docker logs ecstatic_roentgen 
-    ```
 
     /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
     /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
@@ -94,6 +93,7 @@
     2024/02/18 18:15:36 [notice] 1#1: start worker process 33
     2024/02/18 18:15:36 [notice] 1#1: start worker process 34
 
+    ```
 
 6. Stop the running container.
 
@@ -139,52 +139,54 @@
 1. Open a shell session inside the running container and change the first sentence of the default page to "Welcome to MY nginx!". Close the session.
 
 
+    ```
     >docker run -p 8080:80 -d nginx:1.23.3
     >docker ps
     
-    ```
     CONTAINER ID   IMAGE          COMMAND                  CREATED         STATUS PORTS                                   NAMES
     d56eaf24fba3   nginx:1.23.3   "/docker-entrypoint.…"   6 seconds ago   Up 5 seconds   0.0.0.0:8080->80/tcp, :::8080->80/tcp   quirky_mcnulty
 
+    ```
+
     Εκτελούμε την εντολή αυτή για να ξεκινήσουμε το shell μέσα στο container
+
     ```
     >docker exec -it quirky_mcnulty /bin/bash
-
     ```
+    
     Αφού μπούμε στο container, πηγαίνουμε στον φάκελο `/usr/share/nginx/html` για να επεξεργαστούμε το αρχείο `index.html` και κάνουμε τις κατάλληλες τροποποιήσεις. Αλλά επειδή δεν έχουμε κάποιον επεξεργαστή κειμένου, θα εγκαταστήσουμε το nano με τις εξής εντολές:
-    ```
 
+    ```
     >apt-get update
     >apt install nano
+    ```
 
-    ```
     και έπειτα επεξεργαζόμαστε το αρχείο.
-    ```
 
 2. From your computer's terminal (outside the container) download the default page locally and upload another one in its place.
 
-    ```
     Κάνουμε download απο το τερματικό με την εξής εντολή:
-    ```
 
+    ```
     >docker cp quirky_mcnulty:/usr/share/nginx/html/index.html index.html
     
     ```
     Θα επεξεργαστούμε το αρχείο και θα το ξαναβάλουμε μέσα στο container.
-    ```
 
+    ```
     >docker cp index.html quirky_mcnulty:/usr/share/nginx/html/index.html
+    ```
 
 
 3. Close the container, delete it and start another instance. Do you see the changes? Why;
 
+    ```
     >docker stop quirky_mcnulty
     >docker rm quirky_mcnulty
     >docker run -p 8080:80 -d nginx:1.23.3
+    ```
 
-    ```
     Παρατηρούμε ότι οι αλλαγές που κάναμε στο προηγούμενο ερώτημα δεν εμφανίζονται στο νέο container. Αυτό οφείλεται στο γεγονός ότι το image που χρησιμοποιούμε για τη δημιουργία του container δεν περιλαμβάνει τις τροποποιήσεις που πραγματοποιήσαμε πριν.
-    ```
 
 </details>
 
