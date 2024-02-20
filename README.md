@@ -26,7 +26,8 @@ calls are answered. What is the answer?
 
 Answer:
 
-<!-- <!DOCTYPE html>
+```
+<!DOCTYPE html>
 <html>
 <head>
 <title>Welcome to nginx!</title>
@@ -49,8 +50,8 @@ Commercial support is available at
 <p><em>Thank you for using nginx.</em></p>
 </body>
 </html>
+```
 
- -->
 4. Confirm that the container is running in Docker.
 
 > docker ps
