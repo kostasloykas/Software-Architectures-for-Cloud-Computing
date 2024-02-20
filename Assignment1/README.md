@@ -4,8 +4,10 @@
 
 1. Download the images tagged 1.23.3 and 1.23.3-alpine locally.
 
+    ```
     >Docker image pull  nginx:1.23.3
     >Docker image pull  nginx:1.23.3-alpine
+    ```
 
 2. Compare the sizes of the two images.
     ```
@@ -19,8 +21,10 @@
 
 3. Start one of the two images in the background, with the appropriate network settings to forward port 80 locally and use a browser (or curl or wget) to see that calls are answered. What is the answer?
 
+    ```
     > docker run -p 8080:80 -d nginx:1.23.3-alpine
     > curl http://127.0.0.1:8080
+    ```
 
 
     Answer:
@@ -53,8 +57,9 @@
 
 4. Confirm that the container is running in Docker.
 
-    > docker ps
     ```
+    > docker ps
+
     CONTAINER ID   IMAGE                 COMMAND                  CREATED         STATUS         
     9d34b2a3aa44   nginx:1.23.3-alpine   "/docker-entrypoint.…"   5 seconds ago   Up 3 seconds   
 
@@ -64,7 +69,9 @@
 
 5. Get the logs of the running container.
 
+    ```
     >docker logs ecstatic_roentgen 
+    ```
 
     /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
     /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
@@ -90,18 +97,20 @@
 
 6. Stop the running container.
 
+    ```
     >docker stop ecstatic_roentgen
     >docker ps
-    ```
+
     CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
     …...
     ```
 
 7. Start the stopped container.
 
+    ```
     >docker start ecstatic_roentgen 
     >docker ps
-    ```
+
     CONTAINER ID   IMAGE                 COMMAND                  CREATED         STATUS          
     9d34b2a3aa44   nginx:1.23.3-alpine   "/docker-entrypoint.…"   7 minutes ago   Up 38 seconds   
 
@@ -110,10 +119,11 @@
     ```
 8. Stop the container and remove it from Docker.
 
+    ```
     >docker stop ecstatic_roentgen
     >docker rm ecstatic_roentgen
     >docker ps -a
-    ```
+    
     CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
     ……..
     ```
