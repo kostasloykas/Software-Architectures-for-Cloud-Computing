@@ -53,7 +53,7 @@
 
 4. Confirm that the container is running in Docker.
 
-> docker ps
+    > docker ps
     ```
     CONTAINER ID   IMAGE                 COMMAND                  CREATED         STATUS         
     9d34b2a3aa44   nginx:1.23.3-alpine   "/docker-entrypoint.…"   5 seconds ago   Up 3 seconds   
@@ -99,8 +99,8 @@
 
 7. Start the stopped container.
 
->docker start ecstatic_roentgen 
->docker ps
+    >docker start ecstatic_roentgen 
+    >docker ps
     ```
     CONTAINER ID   IMAGE                 COMMAND                  CREATED         STATUS          
     9d34b2a3aa44   nginx:1.23.3-alpine   "/docker-entrypoint.…"   7 minutes ago   Up 38 seconds   
@@ -110,13 +110,13 @@
     ```
 8. Stop the container and remove it from Docker.
 
->docker stop ecstatic_roentgen
->docker rm ecstatic_roentgen
->docker ps -a
-```
-CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
-……..
-```
+    >docker stop ecstatic_roentgen
+    >docker rm ecstatic_roentgen
+    >docker ps -a
+    ```
+    CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+    ……..
+    ```
 </details>
 
 
