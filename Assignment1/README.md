@@ -198,6 +198,49 @@
 <summary>Exercise 3</summary>
 
 
+    Write down the commands needed to download the repository (and submodules) and hugo (the tool that builds the website), build the website locally, and start an Nginx container to serve the CS-548 website instead of the default page.
+
+    Κανουμε clone απο το repo στο git με την παραμετρο recursive για να κανει include και τα submodules.
+    
+    ```
+    > git clone –recursive https://github.com/chazapis/hy548
+    >sudo apt install hugo
+    >cd hy548
+    > make html 
+
+    (cd html && hugo -D)
+    Start building sites … 
+    hugo v0.92.2+extended linux/amd64 BuildDate=2023-01-31T11:11:57Z VendorInfo=ubuntu:0.92.2-1ubuntu0.1
+
+                    | EL | EN  
+    -------------------+----+-----
+    Pages            |  3 |  3  
+    Paginator pages  |  0 |  0  
+    Non-page files   |  0 |  0  
+    Static files     | 60 | 60  
+    Processed images |  0 |  0  
+    Aliases          |  1 |  0  
+    Sitemaps         |  0 |  0  
+    Cleaned          |  0 |  0  
+
+    Total in 83 ms
+    ```
+
+
+    Βλεπουμε οτι εγινε build η εφαρμογη και δημιουργηθηκε ο φακελος public.
+
+    Τωρα θα τρεξουμε ξανα ενα nginx container και θα βαλουμε την σελιδα του μαθηματος μεσα το container ωστε να την τρεξει. 
+
+    Επειδη εφτιαξα αλλο nginx container αλλαξε και το ονομα του.
+
+    ```
+    >cd hy548/html/public
+    >docker cp . great_torvalds:/usr/share/nginx/html
+    >docker restart great_torvalds
+    ```
+
+
+    και βλεπουμε οτι τρεχει κανονικα αφου καναμε restart το container.
 
 
 
@@ -211,6 +254,48 @@
 <summary>Exercise 4</summary>
 
 
+
+a. The Dockerfile.
+
+FROM nginx:1.23.3
+
+RUN apt-get update && \
+apt install -y git && \
+apt install -y hugo && \
+git clone --recursive https://github.com/chazapis/hy548 && \
+cd hy548/html && \
+hugo -D && \
+cp -r public/* /usr/share/nginx/html/
+
+
+
+b. The command needed to upload the image to Docker Hub.
+
+>docker login
+>docker tag image_assignment1:latest kostasloykas/assingment1
+>docker push kostasloykas/assignment1
+
+
+
+
+
+
+c. How much bigger is your own image than the image you were based on. Why;
+
+>docker ps -s
+
+CONTAINER ID   IMAGE                      COMMAND                  CREATED          STATUS          PORTS                                   NAMES             SIZE
+
+9d54d3f6b1c8   image_assignment1:latest   "/docker-entrypoint.…"   39 seconds ago   Up 38 
+seconds   80/tcp                                  elastic_burnell   1.09kB (virtual 324MB)
+
+6997303345ac   nginx:1.23.3               "/docker-entrypoint.…"   29 hours ago     Up 12 minutes   0.0.0.0:8080->80/tcp, :::8080->80/tcp   great_torvalds    6.74MB (virtual 149MB)
+
+Όπως βλέπουμε, το image που δημιουργήσαμε από το Dockerfile είναι πολύ μεγαλύτερη από το image που είχαμε δημιουργήσει πριν (για την ακρίβεια, 175MB μεγαλύτερη). Αυτό οφείλεται στο ότι εγκαταστήσαμε κάποιες βιβλιοθήκες, ενημερώσαμε το apt repository μέσα στο image, και επίσης, κλωνοποιήσαμε τη σελίδα από το GitHub. Οπότε είναι λογικό να έχει και μεγαλύτερο μέγεθος από το προηγούμενο image όπου το build του ιστότοπου έγινε έξω από το image."
+
+d. What have you done in the Dockerfile to keep the image as small as possible?
+
+Συνδύασα πολλές εντολές RUN σε ένα μόνο επίπεδο για να ελαχιστοποιήσω τον αριθμό των επιπέδων στο image. Αυτό μειώνει το συνολικό μέγεθος.
 
 
 
