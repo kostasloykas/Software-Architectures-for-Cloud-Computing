@@ -25,7 +25,7 @@
     > docker run -p 8080:80 -d nginx:1.23.3-alpine
     > curl http://127.0.0.1:8080
     ```
-
+    ![Local Image](./images/1.png)
 
     Answer:
 
@@ -163,6 +163,9 @@
 
     και έπειτα επεξεργαζόμαστε το αρχείο.
 
+    ![Local Image](./images/2.png)
+
+
 2. From your computer's terminal (outside the container) download the default page locally and upload another one in its place.
 
     Κάνουμε download απο το τερματικό με την εξής εντολή:
@@ -176,6 +179,9 @@
     ```
     >docker cp index.html quirky_mcnulty:/usr/share/nginx/html/index.html
     ```
+
+    ![Local Image](./images/3.png)
+
 
 
 3. Close the container, delete it and start another instance. Do you see the changes? Why;
@@ -237,6 +243,7 @@
     >docker cp . great_torvalds:/usr/share/nginx/html
     >docker restart great_torvalds
     ```
+    ![Local Image](./images/4.png)
 
 
     και βλεπουμε οτι τρεχει κανονικα αφου καναμε restart το container.
