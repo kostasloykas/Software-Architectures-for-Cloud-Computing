@@ -1,4 +1,6 @@
 # hy548
+# Name: Konstantinos Loukas
+# AM: csdp1375
 <details>
 <summary>Exercise 1</summary>
 
