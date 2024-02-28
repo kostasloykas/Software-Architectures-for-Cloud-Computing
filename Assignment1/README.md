@@ -1,4 +1,4 @@
-# hy548
+# Assignment 1
 # Name: Konstantinos Loukas
 # AM: csdp1375
 <details>
