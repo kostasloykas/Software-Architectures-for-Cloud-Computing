@@ -6,3 +6,7 @@ spec:
   containers:
   - name: mycontainer
     image: nginx:1.23.3-alpine
+    ports:
+    - containerPort: 80
+      name: http
+      protocol: TCP
