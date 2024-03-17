@@ -25,6 +25,7 @@
     Handling connection for 8080
 
     ````
+    <!-- TODO: Image 1 insert -->
 
 3. See the logs of the running container.
     ```
@@ -55,13 +56,53 @@
     ```
 
 4. Open a shell session inside the running container and change the first sentence of the default page to "Welcome to MY nginx!". Close the session.
+    
+    ```
+    >kubectl exec -it mypod -- /bin/sh
+    >cd usr/share/nginx/html/
+    >vi index.html
+    ```
+    <!-- TODO: Image 2 insert -->
+
+
 5. From your computer terminal (outside the container), download the default page locally and upload another one in its place.
+    
+    ```
+    >kubectl cp default/mypod:/usr/shared/nginx/html/index.html .
+    >kubectl cp ./new_index.html default/mypod:/usr/share/nginx/html/index.html
+
+    ```
+    <!-- TODO: Image 3 insert -->
+
+
 6. Stop the Pod and remove the manifest from Kubernetes.
+
+    ```
+    >kubectl delete pod mypod
+    pod "mypod" deleted
+
+    ```
 
 </details>
 
 <details>
 <summary>Exercise 2</summary>
+
+1. The code that produces the course's website is available on GitHub (https://github.com/chazapis/hy548). Provide the YAML that creates a Job using Ubuntu 20.04, which when started will run a script (defined in a ConfigMap) that will download the repository (and submodules), hugo (the tool that builds the website), and build the website. 
+    
+    ```
+    >kubectl apply -f Ex2.yaml
+    ```
+
+2. Which command can you use to confirm that the Job completed successfully?
+    ```
+    > kubectl get jobs
+    NAME    COMPLETIONS   DURATION   AGE
+    myjob   1/1           4s         27s
+    ```
+
+    Μπορουμε να δουμε στην στηλη COMPLETIONS οτι το "myjob" εχει τελειωσει με επιτυχια.
+
 </details>
 
 <details>

@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: myjob 
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: mycontainer
+        image: ubuntu:20.04
+        command: ["/bin/bash", "-c"]
+        args:
+        - "/bin/bash"
+        - "-c"
+        - "apt-get update"
+        - "apt install -y git" 
+        - "apt install -y hugo" 
+        - "git clone --recursive https://github.com/chazapis/hy548 ./hy548"        
+        - "cd hy548/"
+        - "hugo -D"
+  backoffLimit: 1
