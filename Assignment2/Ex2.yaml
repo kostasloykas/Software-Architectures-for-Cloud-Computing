@@ -9,14 +9,29 @@ spec:
       containers:
       - name: mycontainer
         image: ubuntu:20.04
-        command: ["/bin/bash", "-c"]
-        args:
-        - "/bin/bash"
-        - "-c"
-        - "apt-get update"
-        - "apt install -y git" 
-        - "apt install -y hugo" 
-        - "git clone --recursive https://github.com/chazapis/hy548 ./hy548"        
-        - "cd hy548/"
-        - "hugo -D"
-  backoffLimit: 1
+        command: ["/myconfigvolume/config.sh"]
+        volumeMounts:
+          - name: myconfigvolume
+            mountPath: "/myconfigvolume"
+      volumes:
+        - name: myconfigvolume
+          configMap:
+            name: myconfigmap
+            defaultMode: 0511
+  backoffLimit: 0
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myconfigmap
+data:
+  config.sh: |
+    #!/bin/bash
+    apt-get update
+    apt-get install git -y
+    apt-get install make -y
+    apt-get install -y wget
+    wget https://github.com/gohugoio/hugo/releases/download/v0.124.0/hugo_extended_0.124.0_linux-amd64.deb
+    dpkg --install hugo_extended_0.124.0_linux-amd64.deb
+    git clone "https://github.com/chazapis/hy548"
+    cd hy548 && git submodule init && git submodule update && make all

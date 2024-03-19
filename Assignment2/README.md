@@ -81,6 +81,8 @@
     >kubectl delete pod mypod
     pod "mypod" deleted
 
+    >kubectl delete -f Ex1.yaml
+    pod "mypod" deleted
     ```
 
 </details>
@@ -101,12 +103,17 @@
     myjob   1/1           4s         27s
     ```
 
-    Μπορουμε να δουμε στην στηλη COMPLETIONS οτι το "myjob" εχει τελειωσει με επιτυχια.
+    Μπορουμε να δουμε στην στηλη COMPLETIONS οτι το job "myjob" εχει τελειωσει με επιτυχια.
 
 </details>
 
 <details>
 <summary>Exercise 3</summary>
+
+
+
+
+
 </details>
 
 <details>

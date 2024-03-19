@@ -1,0 +1,157 @@
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: myvolume
+spec:
+  storageClassName: ""
+  capacity:
+    storage: 4Gi
+  accessModes: [ReadWriteOnce]
+  hostPath:
+    path: "/mnt/data"
+
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: myvolumeclaim
+spec:
+  storageClassName: ""
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 1Gi
+
+
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod 
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx:1.23.3-alpine
+    ports:
+    - containerPort: 80
+      name: http
+      protocol: TCP
+    volumeMounts:
+    - name: website
+      mountPath: /usr/share/nginx/html
+  volumes:
+  - name: website
+    persistentVolumeClaim:
+      claimName: myvolumeclaim
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: myjob 
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: ubuntu-container
+        image: ubuntu:20.04
+        command: ["/myconfigvolume/config.sh"]
+        volumeMounts:
+        - name: myconfigvolume
+          mountPath: "/myconfigvolume"
+        - name: website
+          mountPath: /website
+      volumes:
+      - name: myconfigvolume
+        configMap:
+          name: myconfigmap
+          defaultMode: 0511
+      - name: website
+        persistentVolumeClaim:
+          claimName: myvolumeclaim
+  backoffLimit: 0
+
+
+
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myconfigmap
+data:
+  config.sh: |
+    #!/bin/bash
+    apt-get update
+    apt-get install git -y
+    apt-get install make -y
+    apt-get install -y wget
+    wget https://github.com/gohugoio/hugo/releases/download/v0.124.0/hugo_extended_0.124.0_linux-amd64.deb
+    dpkg --install hugo_extended_0.124.0_linux-amd64.deb
+    git clone "https://github.com/chazapis/hy548"
+    cd hy548 && git submodule init && git submodule update && make all
+    rm -r /build_website/*
+    cp ./html/public/* /website -R
+
+
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: job-repeating
+spec:
+  schedule: "15 2 * * *" # Run every night at 2:15
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: refresh-hy548-container
+            image: ubuntu:20.04
+            command: ["/bin/bash","-c"]
+            args: 
+            - |
+              apt-get update
+              apt-get install curl -y
+
+              export response=$(curl -s https://api.github.com/repos/chazapis/hy548/commits/master) 
+              export date=$(echo "$response" | grep '"date"' | tail -n 1 | awk -F'"' '{print $4}') 
+              export last_commit_date=$(date -d "$date" +%s) 
+              export yesterday_2_15=$(date -d 'yesterday 02:15' +%s); 
+
+              echo $last_commit_date
+              echo $yesterday_2_15
+
+              if [ "$last_commit_date" -gt "$yesterday_2_15" ]; then
+                
+                echo "A new commit has been detected in the GitHub repository!"
+                echo "Initiating the update process..."
+
+                apt-get update
+                apt-get install git -y
+                apt-get install make -y
+                apt-get install -y wget
+                wget https://github.com/gohugoio/hugo/releases/download/v0.124.0/hugo_extended_0.124.0_linux-amd64.deb
+                dpkg --install hugo_extended_0.124.0_linux-amd64.deb
+                git clone "https://github.com/chazapis/hy548"
+                cd hy548 && git submodule init && git submodule update && make all
+                rm -r /build_website/*
+                cp ./html/public/* /website -R 
+              else
+                echo "Didn't detected new commits!"
+              fi         
+              
+            volumeMounts:
+            - name: website
+              mountPath: /website
+          volumes:
+          - name: website
+            persistentVolumeClaim:
+              claimName: myvolumeclaim
+      backoffLimit: 0
