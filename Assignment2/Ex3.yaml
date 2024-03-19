@@ -125,8 +125,6 @@ spec:
               export last_commit_date=$(date -d "$date" +%s) 
               export yesterday_2_15=$(date -d 'yesterday 02:15' +%s); 
 
-              echo $last_commit_date
-              echo $yesterday_2_15
 
               if [ "$last_commit_date" -gt "$yesterday_2_15" ]; then
                 

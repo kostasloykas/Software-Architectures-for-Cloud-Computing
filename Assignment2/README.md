@@ -110,12 +110,25 @@
 <details>
 <summary>Exercise 3</summary>
 
+1. Following the previous two exercises, provide a single YAML that will run the Pod with Nginx, the above Job with the script, and a CronJob that will refresh the content every night at 2:15 (only if changes have been made to git). The Nginx Pod should serve the web pages produced by the Jobs instead of the default page. 
+
+    ```
+    >kubectl apply -f Ex3.yaml
+    ```
 
 
+2. Briefly describe how data is communicated between containers.
 
+    Για να μπορέσουν τα διάφορα containers να επικοινωνήσουν μεταξύ τους έφτιαξα ένα Persistent Volume όπου γίνεται consume με την χρήση persistentVolumeClaim από τα διάφορα containers και κανουν mount το ίδιο volume αυτό. Έτσι μπορούν και μοιράζονται τα shared δεδομένα-αρχεία όπου βρίσκονται στο volume αυτό.
 
 </details>
 
 <details>
 <summary>Exercise 4</summary>
+
+
+
+
+
+
 </details>
