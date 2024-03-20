@@ -25,7 +25,7 @@
     Handling connection for 8080
 
     ````
-    <!-- TODO: Image 1 insert -->
+![Local Image](./images/1.png)
 
 3. See the logs of the running container.
     ```
@@ -62,7 +62,7 @@
     >cd usr/share/nginx/html/
     >vi index.html
     ```
-    <!-- TODO: Image 2 insert -->
+![Local Image](./images/2.png)
 
 
 5. From your computer terminal (outside the container), download the default page locally and upload another one in its place.
@@ -72,7 +72,7 @@
     >kubectl cp ./new_index.html default/mypod:/usr/share/nginx/html/index.html
 
     ```
-    <!-- TODO: Image 3 insert -->
+![Local Image](./images/3.png)
 
 
 6. Stop the Pod and remove the manifest from Kubernetes.
@@ -126,9 +126,22 @@
 <details>
 <summary>Exercise 4</summary>
 
+1. Following on from the previous exercise, embed the Nginx Pods in a Deployment (keeping the Job and Cronjob in the YAML) and use an init container to start the Pods when the web page is finished building. Also add a Service to the manifest. Provide the overall YAML.
 
+    Κάνουμε apply το Ex4.yaml
+    ```
+    >kubectl apply -f Ex4.yaml
+    ```
+    
+   Και μπορούμε να ελέξουμε αν έχει γίνει σωστά build η εφαρμογή, μέσα στο initContainer, από τα echo που έχω προσθέσει μέσα στο YAML αρχείο με την παρακάτω εντολή.
+    ```
+    kubectl logs -f mydeployment-8f6954978-zjfv5 -c container-that-start-pods
+    ```
 
-
+   Και τέλος, μπορούμε να κάνουμε port forward στο service και να κάνουμε request στο http://localhost:8080/ και θα μας απαντήσει ένα από τα τρία nginx pods.
+    ```
+    kubectl port-forward services/website 8080:8080
+    ```
 
 
 </details>
