@@ -95,10 +95,6 @@
         containers:
             - name: flaskone
             image: kostasloykas/assignment2:latest
-            resources:
-                limits:
-                cpu: "200m"
-                memory: "128Mi"
             env:
                 - name: MESSAGE
                 value: "This is the first service!"
@@ -157,10 +153,6 @@
         containers:
             - name: flasktwo
             image: kostasloykas/assignment2:latest
-            resources:
-                limits:
-                cpu: "200m"
-                memory: "128Mi"
             env:
                 - name: MESSAGE
                 value: "This is the second service!"
@@ -192,5 +184,197 @@
 
 <details>
 <summary>Exercise 2</summary>
+
+I modified the locust.yaml file to direct requests to the root endpoint (/) instead of '/hello'.
+
+1. Following on from the previous exercise, extend the YAML that implements the /first endpoint: To limit each Pod to a maximum of 20% CPU and 256MB RAM. With a HorizontalPodAutoscaler manifest, which will increase the number of Pods in the Deployment when the average CPU usage exceeds 80%. Set a minimum of 1 Pod and a maximum of 8 for the Deployment.
+
+
+    first.yaml
+
+    ```
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+    name: flask-one-ingress
+    annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /
+    spec:
+    rules:
+    - http:
+        paths:
+        - path: /first
+            pathType: Prefix
+            backend:
+            service:
+                name: flaskone
+                port:
+                number: 8080
+
+
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+    name: flaskone
+    spec:
+    type: ClusterIP
+    ports:
+    - port: 8080
+    selector:
+        app: flaskone
+
+
+    ---
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+    name: flaskone
+    spec:
+    replicas: 1
+    selector:
+        matchLabels:
+        app: flaskone
+    template:
+        metadata:
+        labels:
+            app: flaskone
+        spec:
+        containers:
+            - name: flaskone
+            image: kostasloykas/assignment2:latest
+            resources:
+                limits:
+                cpu: "200m"
+                memory: "256Mi"
+            env:
+                - name: MESSAGE
+                value: "This is the first service!"
+
+
+    ---
+    apiVersion: autoscaling/v2
+    kind: HorizontalPodAutoscaler
+    metadata:
+    name: flaskone-autoscaler
+    spec:
+    scaleTargetRef:
+        apiVersion: apps/v1
+        kind: Deployment
+        name: flaskone
+    minReplicas: 1
+    maxReplicas: 8
+    metrics:
+    - type: Resource
+        resource:
+        name: cpu
+        target:
+            type: Utilization
+            averageUtilization: 80
+
+    ```
+
+    second.yaml
+    
+    ```
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+    name: flask-two-ingress
+    annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /
+    spec:
+    rules:
+    - http:
+        paths:
+        - path: /second
+            pathType: Prefix
+            backend:
+            service:
+                name: flasktwo
+                port:
+                number: 8080
+
+
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+    name: flasktwo
+    spec:
+    type: ClusterIP
+    ports:
+    - port: 8080
+    selector:
+        app: flasktwo
+
+
+    ---
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+    name: flasktwo
+    spec:
+    replicas: 1
+    selector:
+        matchLabels:
+        app: flasktwo
+    template:
+        metadata:
+        labels:
+            app: flasktwo
+        spec:
+        containers:
+            - name: flasktwo
+            image: kostasloykas/assignment2:latest
+            env:
+                - name: MESSAGE
+                value: "This is the second service!"
+
+    ```
+
+    The benchmarking tool used is Locust, which is provided within the scaling repository. 
+
+    ![Local Image](./images/3.png)
+    ![Local Image](./images/4.png)
+
+
+    For the first.yaml the output of the command line utitility is displayed below. It required a total of 8 pods to handle the requests from 100 users, as observed with 0% failures.
+    
+    
+    ```
+    >kubectl get hpa flaskone-autoscaler --watch
+
+    NAME                  REFERENCE             TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+    flaskone-autoscaler   Deployment/flaskone   <unknown>/80%   1         8         1          43s
+    flaskone-autoscaler   Deployment/flaskone   <unknown>/80%   1         8         1          55s
+    flaskone-autoscaler   Deployment/flaskone   99%/80%         1         8         1          115s
+    flaskone-autoscaler   Deployment/flaskone   99%/80%         1         8         4          2m10s
+    flaskone-autoscaler   Deployment/flaskone   100%/80%        1         8         4          2m56s
+    flaskone-autoscaler   Deployment/flaskone   98%/80%         1         8         4          3m56s
+    flaskone-autoscaler   Deployment/flaskone   98%/80%         1         8         5          4m11s
+    flaskone-autoscaler   Deployment/flaskone   98%/80%         1         8         5          4m56s
+    flaskone-autoscaler   Deployment/flaskone   98%/80%         1         8         5          5m56s
+    flaskone-autoscaler   Deployment/flaskone   98%/80%         1         8         7          6m11s
+    flaskone-autoscaler   Deployment/flaskone   95%/80%         1         8         7          6m56s
+    flaskone-autoscaler   Deployment/flaskone   90%/80%         1         8         7          7m56s
+    flaskone-autoscaler   Deployment/flaskone   90%/80%         1         8         8          8m11s
+    flaskone-autoscaler   Deployment/flaskone   80%/80%         1         8         8          8m56s
+    ```
+
+
+    As we can see for the second.yaml the unique pod had 17% failures. 
+    ![Local Image](./images/5.png)
+    ![Local Image](./images/6.png)
+
+
 </details>
 
+
+<details>
+<summary>Exercise 3</summary>
+
+
+
+
+</details>

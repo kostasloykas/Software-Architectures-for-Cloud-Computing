@@ -48,10 +48,6 @@ spec:
       containers:
         - name: flasktwo
           image: kostasloykas/assignment2:latest
-          resources:
-            limits:
-              cpu: "200m"
-              memory: "128Mi"
           env:
             - name: MESSAGE
               value: "This is the second service!"

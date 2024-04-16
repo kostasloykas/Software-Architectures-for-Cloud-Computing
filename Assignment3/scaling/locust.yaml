@@ -36,7 +36,7 @@ data:
     class HelloWorldUser(HttpUser):
         @task
         def hello_world(self):
-            self.client.get("/hello")
+            self.client.get("/")
 ---
 apiVersion: apps/v1
 kind: Deployment
