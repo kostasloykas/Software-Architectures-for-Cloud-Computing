@@ -363,7 +363,7 @@ I modified the locust.yaml file to direct requests to the root endpoint (/) inst
     ```
 
 
-    As we can see for the second.yaml the unique pod had 17% failures. 
+    As we can see for the second.yaml the unique pod had 17% failures and also it was very unstable as the image shows in total request per seconds chart.  
     ![Local Image](./images/5.png)
     ![Local Image](./images/6.png)
 
@@ -374,7 +374,38 @@ I modified the locust.yaml file to direct requests to the root endpoint (/) inst
 <details>
 <summary>Exercise 3</summary>
 
+1. If you have enabled the ingress addon in minikube, remove it. Issue the commands to install the Ingress controller implemented with Nginx using Helm. You will find the chart at https://artifacthub.io/packages/helm/ingress-nginx/ingress-nginx. Try again the services of the above exercises. What changes are needed in the YAML files to make them work (if any)?
 
+    We first run these commands to install ingress-nginx and disable ingress addon from minikube.
+    ```
+    >minikube addons disable ingress
+    >helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+    >helm repo update
+    >helm install [RELEASE_NAME] ingress-nginx/ingress-nginx
+    >minikube tunnel
+    ```
 
+    Then we add to both yaml files the ingressClassName: nginx under the spec of Ingress. And then we apply the yaml files:
+
+    ```
+    >kubectl apply -f fisrt.yaml
+    >kubectl apply -f second.yaml
+    ```
+
+    Then we wait until the flask-one-ingress get an IP, as we can see below:
+
+    ```
+    >kubectl get ingress
+    NAME                CLASS   HOSTS       ADDRESS         PORTS   AGE
+    flask-one-ingress   nginx   localhost   10.105.47.252   80      36s
+    ```
+
+    And then we browse to links (10.105.47.252/first , 10.105.47.252/second) as we can see in picures.
+    
+    first:
+    ![Local Image](./images/7.png)
+
+    second:
+    ![Local Image](./images/8.png)
 
 </details>
