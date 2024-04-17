@@ -409,3 +409,32 @@ I modified the locust.yaml file to direct requests to the root endpoint (/) inst
     ![Local Image](./images/8.png)
 
 </details>
+
+
+
+<details>
+<summary>Exercise 4</summary>
+
+1. Create a Helm chart for the service that implements the /first endpoint of exercise 2.
+
+    First i run the command shown below in order to create a folder with the a specific template.
+    ```
+    >helm create mychart
+    ```
+
+    Then i modified the apropriate files (values.yaml,hpa.yaml,deployment.yaml,ingress.yaml,service.yaml).
+    These files are located in folder mychart/templates. Then i run the commands shown below in order to enable ingress and install my chart in kubernetes cluster.
+
+    ```
+    >minikube addons enable ingress
+    >helm install mychart  ./mychart
+    >minikube tunnel
+    ```
+
+    As we can see in the picture below the pod responses successfully.
+    ![Local Image](./images/9.png)
+
+
+
+
+</details>
